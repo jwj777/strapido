@@ -4,7 +4,8 @@
   "info": {
     "singularName": "company",
     "pluralName": "companies",
-    "displayName": "Company"
+    "displayName": "Company",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -16,6 +17,15 @@
     },
     "companyDescription": {
       "type": "richtext"
+    },
+    "companyUrl": {
+      "type": "string"
+    },
+    "product_categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-category.product-category",
+      "inversedBy": "companies"
     }
   }
 }
