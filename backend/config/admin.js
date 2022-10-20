@@ -1,12 +1,7 @@
-module.exports = ({ env }) => ({
+export default ({ env }) => ({
   auth: {
-    secret: env('ADMIN_JWT_SECRET'),
+    secret: env("ADMIN_JWT_SECRET", ""),
   },
-  apiToken: {
-    salt: env('API_TOKEN_SALT'),
-  },
-  admin: {
-    url: '/strapi/admin',
-    serverAdminPanel: false
-  }
+  serveAdminPanel: env.bool("SERVE_ADMIN", true),
+  url: env("PUBLIC_ADMIN_URL", "/admin"),
 });
