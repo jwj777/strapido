@@ -9,14 +9,13 @@ export default function Insights({ articles, insightsPage }) {
     <Layout>
 
     <Flex h={120}>
-      <Heading fontSize='6xl' mb={3}>{insightsPage.attributes.headline}</Heading>
+      <Heading fontSize='6xl' mb={3}>{insightsPage.attributes.Headline}</Heading>
     </Flex>
 
-    <Flex classsName="articlesContainer" flexDirection='column' maxW='container.lg'>
-
+    <Flex className="articles-container" flexDirection='column' maxW='container.lg'>
       {articles.map((item, index) => {
         return (
-        <Box className="articleItem" flex='1' mb={8}>
+        <Box key={index} className="articleItem" flex='1' mb={8}>
           <LinkBox>
             <LinkOverlay href={"/articles/" + item.attributes.slug}>
               <Heading as='h2' size='lg' mb={2}>
@@ -39,17 +38,13 @@ export async function getStaticProps() {
 
   // get posts from strapi
   const resarticles = await fetch(process.env.API_URL + '/api/articles');
-  const resarticlesjson = await resarticles.json();
-  const articles = resarticlesjson.data;
-
-  console.log(articles);
+  const articlesjson = await resarticles.json();
+  const articles = articlesjson.data;
 
   // get home page from strapi
   const reshome = await fetch(process.env.API_URL + '/api/pages/1')
   const reshomejson = await reshome.json();
   const insightsPage = reshomejson.data;
-
-  console.log(reshomejson);
   
   return {
     props: { articles, insightsPage },

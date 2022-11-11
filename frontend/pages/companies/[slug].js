@@ -1,33 +1,36 @@
-import { Flex, Heading, Container, Image, Text, Link } from '@chakra-ui/react'
+import { Flex, Heading, Container, Image, Text, Link, Icon, Box, UnorderedList, ListItem } from '@chakra-ui/react'
 import Header from '/components/header/Header'
-import NextImage from "next/image";
+import CompanyHeading from '../../components/company/company-header'
+import CompanyLinks from '../../components/company/company-links'
 
-export default function Company({ company }) {
+export default function Company({ company, features }) {
   return (
 
     <div>
 
-    <Header />
+      <Header />
 
-    <Flex alignItems="center" justifyContent="center">
-    <Container maxW={'7xl'} flex={'1 0 auto'} py={8} mt={20}>
-    
-    <Heading fontSize='4xl' mb={1}>{company.companyName}</Heading>
-    <Text fontSize='lg' mt={4} mb={8}>{company.companyDescription}</Text>  
+      <Flex alignItems='center' justifyContent='center'>
+        <Container className="main-content" maxW={'7xl'} flex={'1 0 auto'}>
 
-    <Image
-      boxSize='200px'
-      objectFit='cover'
-      src={'http://localhost:1337' + company.mainImage.data.attributes.url}
-      alt={company.companyName + ' Website Homepage'}
-    />
+          <CompanyHeading company={company} />
 
+          <Box display="flex">
+            <Text fontSize='md' mt={4} mb={8} pr={16}>{company.companyDescription}</Text>
+            <CompanyLinks company={company} />
+          </Box>
 
-   
+          <Box>
+            <Heading as='h2'>Features</Heading>
+            {features.map((item, index) => {
+              return (
+                <Text key={item.attributes.featurename + '__' + index}>{item.attributes.featureName}</Text>
+              );
+            })}
+          </Box>
 
-
-    </Container>
-    </Flex>
+        </Container>
+      </Flex>
 
     </div>
 
@@ -37,8 +40,8 @@ export default function Company({ company }) {
 
 export async function getStaticPaths() {
   const res = await fetch(process.env.API_URL + '/api/companies');
-  const data = await res.json();
-  const companies = data.data;
+  const resjson = await res.json();
+  const companies = resjson.data;
 
   const paths = companies.map((item, index) => ( {
     params: {slug: item.attributes.slug}
@@ -55,15 +58,22 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { slug } = params;
 
-  const res = await fetch(process.env.API_URL + `/api/companies?filters[Slug]=${slug}&populate=*`);
+  const res = await fetch(process.env.API_URL + `/api/companies?filters[slug]=${slug}&populate=*`);
   const res2 = await res.json();
   const res3 = res2.data;
   const company = res3[0].attributes;
 
-  console.log(company.mainImage.data.attributes.url)
+  const resfeatures = await fetch(process.env.API_URL + `/api/features?filters[companies][slug][$eq]=${slug}&populate=*`);
+  const resfeaturesjson = await resfeatures.json();
+  const features = resfeaturesjson.data;
+
+  console.log(features)
 
   return {
-    props: { company },
+    props: { 
+      company,
+      features,
+     },
   };
 
 }

@@ -2,16 +2,14 @@ import Head from 'next/head'
 import { Flex, Heading, Container, Text } from '@chakra-ui/react'
 import Layout from '../components/layout/Layout'
 import Header from '/components/header/Header'
-import headCustom from '../components/headCustom'
-
 
 export default function Home({ homepage }) {
   return (
 
     <Layout>
        
-        <Heading fontSize='6xl' mb={3}>{homepage.attributes.Headline}</Heading>
-        <Text fontSize='3xl' mb={8}>{homepage.attributes.Subheading}</Text>
+        <Heading as='h1' mb={3} maxW='960px'>{homepage.attributes.Headline}</Heading>
+        <Text fontSize='3xl' mb={8} maxW='960px'>{homepage.attributes.Subheading}</Text>
 
     </Layout>   
 
@@ -29,6 +27,8 @@ export async function getStaticProps() {
   const reshome = await fetch(process.env.API_URL + '/api/homepages/1')
   const reshomejson = await reshome.json();
   const homepage = reshomejson.data;
+
+  console.log(reshomejson)
   
   return {
     props: { homepage },

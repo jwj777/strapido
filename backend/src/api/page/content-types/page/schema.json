@@ -4,7 +4,8 @@
   "info": {
     "singularName": "page",
     "pluralName": "pages",
-    "displayName": "Page"
+    "displayName": "Page",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,8 +21,10 @@
     "Body": {
       "type": "richtext"
     },
-    "pageName": {
-      "type": "string"
+    "slug": {
+      "type": "string",
+      "unique": true,
+      "required": true
     }
   }
 }
